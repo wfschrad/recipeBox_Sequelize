@@ -21,6 +21,22 @@ try {
 
 
 async function createNewInstruction(specification, recipeId) {
+  let instructionNum = await Instruction.max('listOrder', {
+    where: {
+      recipeId: recipeId,
+    }
+  });
+  if (!instructionNum) instructionNum = 0;
+
+  // listNums = instructions.map( instruction => instruction.listOrder);
+  // let instructionNum = Math.max(...listNums) + 1;
+  // if(instructionNum < 0) instructionNum = 1;
+  return await Instruction.create({
+    specification: specification,
+    listOrder: instructionNum + 1,
+    recipeId: recipeId
+  })
+
   // Use the findAll method of the Instruction object to find all the
   // instructions for the specified recipe.
   //
